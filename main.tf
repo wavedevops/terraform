@@ -1,7 +1,7 @@
 resource "aws_iam_user" "user" {
   name = var.name
   tags = {
-    tag-key = "tag-value"
+    tag-key = var.name
   }
 }
 
