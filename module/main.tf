@@ -40,4 +40,8 @@ resource "cloudflare_dns_record" "dns" {
   proxied = false
 
   depends_on = [aws_instance.instance]
+
+  lifecycle {
+    ignore_changes = [proxiable]
+  }
 }
