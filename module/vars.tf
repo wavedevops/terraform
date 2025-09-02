@@ -1,5 +1,5 @@
 variable "env" {}
-variable "components" {}
-variable "api_token" {}
+variable "instance_type" {}
+variable "component_name" {}
 variable "zone_id" {}
 variable "subnet_id" {}

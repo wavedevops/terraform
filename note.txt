@@ -1,0 +1,147 @@
+➜  create-workstation git:(main) ✗ tree
+.
+├── env-dev
+│   └── input.tfvars a
+|
+├── main.tf 1a
+├── module
+│         ├── data.tf 2a
+│         ├── main.tf 2b
+│         └── vars.tf 2c
+├── provider.tf 1b
+└── vars.tf 1c
+
+a
+api_token = "87ZNiv21Oz9wpOT2ih2sQvutXXU2W7CkSi7ozLqV"
+components = {
+  frontend = {
+    name          = "frontend"
+    instance_type = "t3.small"
+  }
+  # mongodb = {
+  #   name          = "mongodb"
+  #   instance_type = "t3.small"
+  # }
+  # catalogue = {
+  #   name          = "catalogue"
+  #   instance_type = "t3.micro"
+  # }
+  # redis = {
+  #   name          = "redis"
+  #   instance_type = "t3.small"
+  # }
+  # user = {
+  #   name          = "user"
+  #   instance_type = "t3.micro"
+  # }
+  # cart = {
+  #   name          = "cart"
+  #   instance_type = "t3.micro"
+  # }
+  # mysql = {
+  #   name          = "mysql"
+  #   instance_type = "t3.small"
+  # }
+  # shipping = {
+  #   name          = "shipping"
+  #   instance_type = "t3.medium"
+  # }
+  # rabbitmq = {
+  #   name          = "rabbitmq"
+  #   instance_type = "t3.small"
+  # }
+  # payment = {
+  #   name          = "payment"
+  #   instance_type = "t3.small"
+  # }
+}
+
+env = "dev"
+
+1a
+module "servers" {
+  for_each = var.components
+  source         = "./module"
+  component_name = each.value["name"]
+  env            = var.env
+  instance_type  = each.value["instance_type"]
+}
+
+1b
+
+terraform {
+  required_providers {
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 5"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 6.11.0"
+    }
+  }
+}
+
+
+provider "aws" {
+  region     = "us-east-1"
+}
+
+provider "cloudflare" {
+  api_token = var.api_token
+}
+
+1c
+
+variable "env" {}
+variable "components" {}
+variable "api_toke
+
+2a
+data "aws_security_group" "sg" {
+  name = "allow-all"
+}
+
+data "aws_ami" "ami" {
+  most_recent = true
+  name_regex  = "RHEL-9-DevOps-Practice"
+  owners      = ["973714476881"]
+}
+##########################################################################
+
+2b
+
+resource "aws_instance" "instance" {
+  ami                    = data.aws_ami.ami
+  instance_type          = var.instance_type
+  vpc_security_group_ids = [data.aws_security_group.sg.id]
+  subnet_id = "subnet-00e05b15c4116939b"
+
+  instance_market_options {
+    market_type = "spot"
+
+    spot_options {
+      spot_instance_type             = "persistent"
+      instance_interruption_behavior = "stop"
+    }
+  }
+  tags = {
+    Name = var.env != "" ? "${var.component_name}-${var.env}" : var.component_name
+  }
+}
+# Cloudflare DNS record
+resource "cloudflare_dns_record" "frontend" {
+  zone_id = "33b0e0a5c550ad768189608a60a43082"
+  type    = "A"
+  name    = "${var.component_name}-${var.env}.durgasri.in"
+  ttl     = 60
+  content = [aws_instance.instance.private_ip]
+  proxied = false
+  depends_on = [aws_instance.instance] # ensure EC2 IP is ready
+}
+
+2c
+variable "env" {}
+variable "instance_type" {}
+variable "component_name" {}
+
