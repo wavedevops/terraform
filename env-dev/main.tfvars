@@ -81,6 +81,14 @@ components = {
     name          = "mysql"
     instance_type = "t3.small"
   }
+  rabbitmq = {
+    name          = "rabbitmq"
+    instance_type = "t3.small"
+  }
+  payment = {
+    name          = "payment"
+    instance_type = "t3.small"
+  }
 }
 
 env       = "dev"
