@@ -36,7 +36,7 @@ resource "cloudflare_dns_record" "dns" {
   type    = "A"
   name    = "${var.component_name}-${var.env}.durgasri.in"
   ttl     = 60
-  content = aws_instance.instance.private_ip
+  content = var.component_name == "frontend" ? aws_instance.instance.public_ip : aws_instance.instance.private_ip
   proxied = false
 
   depends_on = [aws_instance.instance]
