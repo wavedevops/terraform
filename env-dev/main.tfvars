@@ -57,11 +57,14 @@ components = {
     name          = "frontend"
     instance_type = "t3.small"
   }
-  # Uncomment other services when needed
-  # mongodb = {
-  #   name          = "mongodb"
-  #   instance_type = "t3.small"
-  # }
+  mongodb = {
+    name          = "mongodb"
+    instance_type = "t3.small"
+  }
+  catalogue = {
+    name          = "catalogue"
+    instance_type = "t3.micro"
+  }
 }
 
 env       = "dev"
