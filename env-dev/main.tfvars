@@ -82,6 +82,10 @@ components = {
     instance_type = "t3.small"
   }
   rabbitmq = {
+    name          = "shipping"
+    instance_type = "t3.micro"
+  }
+  rabbitmq = {
     name          = "rabbitmq"
     instance_type = "t3.small"
   }
