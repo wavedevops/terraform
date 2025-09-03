@@ -45,3 +45,4 @@ resource "cloudflare_dns_record" "dns" {
     ignore_changes = [proxiable]
   }
 }
+
