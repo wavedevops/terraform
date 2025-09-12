@@ -18,6 +18,10 @@ override.tf.json
 *.tfvars
 *.tfvars.json
 
+# Terraform lock file
+.terraform.lock.hcl
+
+
 # CLI configuration files
 .terraformrc
 terraform.rc
