@@ -22,3 +22,6 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# IDE settings
+.idea/
+.vscode/
