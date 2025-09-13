@@ -10,7 +10,6 @@ apply:
 	rm -rf *.terraform .terraform.lock.hcl
 
 
-
 destroy:
 	rm -rf .terraform .terraform.lock.hcl
 	terraform init -backend-config=state.tfvars
