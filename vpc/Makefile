@@ -1,3 +1,8 @@
+plan:
+	rm -rf *.terraform .terraform.lock.hcl
+	terraform init -backend-config=state.tfvars
+	terraform plan -auto-approve
+
 apply:
 	rm -rf *.terraform .terraform.lock.hcl
 	terraform init -backend-config=state.tfvars
